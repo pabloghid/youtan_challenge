@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1> Hello! </h1>
+
+{% if companies %}
+{% for company in companies %}
+
+    {{ company.company_name }}
+
+{% endfor %}
+{% endif %}
+
+{% endblock %}
