@@ -16,5 +16,6 @@ class CompanyBranch(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     branch_name = models.CharField(max_length=100, null=False, blank=False)
     status = models.BooleanField(default=False)
+    branch_CNPJ = models.CharField(max_length=14, unique=True)
     created_at = models.DateTimeField(auto_now_add=True, null=False)
     updated_at = models.DateTimeField(auto_now=True, null=False)

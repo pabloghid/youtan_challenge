@@ -1,0 +1,45 @@
+<div class="modal fade" id="addBranchModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" id="add-branch-form">
+                <div class="modal-body">
+
+                    {% csrf_token %}
+
+                    <input type="hidden" name="company_id" value="{{ company_id }}">
+
+                    {{ branch_form.as_p }}
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-success">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#add-branch-form').on('submit', function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'add_branch' %}",
+                data: formData,
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+
+                }
+            });
+        });
+    });
+</script>
