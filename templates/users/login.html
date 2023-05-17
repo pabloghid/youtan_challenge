@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="POST" action="{% url 'login' %}">
-{% csrf_token %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{% url 'login' %}">
+                    {% csrf_token %}
 
-{{ form.as_p }}
+                    {{ form.as_p }}
 
-<button type="submit" class="btn btn-primary">Entrar</button>
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                    <a href="{% url 'register' %}" class="btn btn-secondary float-end">Registrar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

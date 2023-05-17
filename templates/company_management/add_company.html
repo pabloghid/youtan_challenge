@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-center mb-4">Adicionar Empresa</h1>
+                <form method="POST" action="{% url 'add_company' %}">
+                    {% csrf_token %}
+                    <div class="row align-items-center">
+
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="{{ form.company_name.id_for_label }}" class="form-label">{{form.company_name.label }}</label>
+                                {{ form.company_name }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group text-end">
+                                <label for="{{ form.status.id_for_label }}" class="form-label d-block text-center">{{form.status.label }}</label>
+                                <div class="d-flex justify-content-center">
+                                    {{ form.status }}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success">Adicionar Empresa</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

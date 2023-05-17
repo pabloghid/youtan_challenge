@@ -3,11 +3,17 @@ from .models import Company, CompanyBranch
 from .forms import CompanyForm, BranchForm
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.contrib import messages
 
 
 @login_required
 def home(request):
-    companies = Company.objects.all()
+    # Pagination 
+    p = Paginator(Company.objects.all(), 5)
+    page = request.GET.get('page')
+    companies = p.get_page(page)
+    
     return render(request, 'company_management/index.html', {'companies': companies})
 
 ## company 
@@ -18,19 +24,32 @@ def add_company(request):
         if form.is_valid():
             add_company = form.save()
             return redirect('home')
-    return render(request, 'company_management/register.html', {'form': form, })
+        else:
+            messages.error(request, "Não foi possível adicionar. Verifique os dados e tente novamente.")
+    return render(request, 'company_management/add_company.html', {'form': form})
 
 @login_required
 def edit_company(request, pk):
     company_data = Company.objects.get(id=pk)
-    company_branches = CompanyBranch.objects.filter(company=pk)
+
+    # pagination
+    p = Paginator(CompanyBranch.objects.filter(company=pk), 5)
+    page = request.GET.get('page')
+    company_branches = p.get_page(page)
+
+    #original
+    #company_branches = CompanyBranch.objects.filter(company=pk)
+
     ## Forms
     form = CompanyForm(request.POST or None, instance=company_data)
     branch_form = BranchForm(request.POST or None)
 
-    if form.is_valid():
-        form.save()
-        return redirect('home')
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        else:
+            messages.error(request, "Não foi possível editar. Verifique os dados e tente novamente.")
     return render(request, 'company_management/edit_company.html', {'form': form, 'company_branches': company_branches, 'branch_form':branch_form, 'company_id':pk})
 
 @login_required

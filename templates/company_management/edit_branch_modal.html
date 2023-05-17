@@ -1,25 +1,23 @@
-<div class="modal fade" id="addBranchModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+<div class="modal fade" id="editBranchModal" tabindex="-2" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="addModalLabel">Modal title</h1>
+                <h1 class="modal-title fs-5" id="editModalLabel">Editar CNPJ</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" id="add-branch-form">
+            <form method="POST" id="edit-branch-form">
                 <div class="modal-body">
 
                     {% csrf_token %}
 
-                    <input type="hidden" name="company_id" value="{{ company_id }}">
-
                     {{ branch_form.as_p }}
 
-                    <div id="add-error-messages"></div>
+                    <div id="error-messages"></div>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-success">Adicionar</button>
+                    <button type="submit" class="btn btn-success">Editar</button>
                 </div>
             </form>
         </div>
@@ -27,13 +25,33 @@
 </div>
 
 <script>
+    var url;
     $(document).ready(function () {
-        $('#add-branch-form').on('submit', function (e) {
+        $('.btn-edit-branch').on('click', function () {
+            var branchId = $(this).data('id');
+            url = '/edit_branch/' + branchId;
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (response) {
+                    $('#editBranchModal #id_branch_name').val(response.branch_name);
+                    $('#editBranchModal #id_branch_CNPJ').val(response.branch_CNPJ);
+                    $('#editBranchModal #id_status').prop('checked', response.status);
+                    /* clear error div */
+                    var errorMessages = document.getElementById("error-messages");
+                    errorMessages.innerHTML = "";
+                },
+                error: function (xhr, status, error) {
+                }
+            });
+        });
+        $('#edit-branch-form').on('submit', function (e) {
             e.preventDefault();
             var formData = $(this).serialize();
             $.ajax({
                 type: 'POST',
-                url: "{% url 'add_branch' %}",
+                url: url,
                 data: formData,
                 success: function (response) {
                     location.reload();
@@ -42,7 +60,7 @@
                     var response = JSON.parse(xhr.responseText);
                     var errors = response.errors
                     /* error div */
-                    var errorMessages = document.getElementById("add-error-messages");
+                    var errorMessages = document.getElementById("error-messages");
                     errorMessages.innerHTML = "";
 
                     for (var field in errors) {

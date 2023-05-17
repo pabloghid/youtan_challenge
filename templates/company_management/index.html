@@ -34,8 +34,8 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{% url 'edit_company' company.id %}" class="btn btn-secondary">
-                                Editar
+                            <a href="{% url 'edit_company' company.id %}" class="btn btn-outline-primary">
+                                <i class="bi bi-pen"></i> Editar
                             </a>
                         </td>
                     </tr>
@@ -45,6 +45,34 @@
         </div>
     </div>
 </div>
+
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+
+    {% if companies.has_previous %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{ companies.previous_page_number }}">Anterior</a>
+    </li>
+    {% elif not companies.has_previous %}
+        <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+    {% endif %}
+
+    {% for page in companies.paginator.page_range %}
+        <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if companies.has_next %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{ companies.next_page_number }}">Próxima</a>
+    </li>
+    {% elif not companies.has_next %}
+        <li class="page-item disabled"><a class="page-link" href="#">Próxima</a></li>
+    {% endif %}
+    </ul>
+</nav>
+
+
 {% else %}
 <p>Nenhuma empresa encontrada.</p>
 {% endif %}
