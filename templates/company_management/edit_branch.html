@@ -12,6 +12,8 @@
 
                     {{ branch_form.as_p }}
 
+                    <div id="error-messages"></div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -27,7 +29,7 @@
     $(document).ready(function () {
         $('.btn-edit-branch').on('click', function () {
             var branchId = $(this).data('id');
-            url = '/edit_branch/'+ branchId;
+            url = '/edit_branch/' + branchId;
 
             $.ajax({
                 type: 'GET',
@@ -36,9 +38,11 @@
                     $('#editBranchModal #id_branch_name').val(response.branch_name);
                     $('#editBranchModal #id_branch_CNPJ').val(response.branch_CNPJ);
                     $('#editBranchModal #id_status').prop('checked', response.status);
+                    /* clear error div */
+                    var errorMessages = document.getElementById("error-messages");
+                    errorMessages.innerHTML = "";
                 },
                 error: function (xhr, status, error) {
-                    console.log('erro', error)
                 }
             });
         });
@@ -53,11 +57,22 @@
                     location.reload();
                 },
                 error: function (xhr, status, error) {
-                    console.log('erro', error)
+                    var response = JSON.parse(xhr.responseText);
+                    var errors = response.errors
+                    /* error div */
+                    var errorMessages = document.getElementById("error-messages");
+                    errorMessages.innerHTML = "";
+
+                    for (var field in errors) {
+                        var fieldErrors = errors[field];
+                        /* insert error in html */
+                        var errorMessage = document.createElement("p");
+                        errorMessage.classList.add("alert", "alert-danger");
+                        errorMessage.innerText = fieldErrors;
+                        errorMessages.appendChild(errorMessage);
+                    }
                 }
             });
         });
     });
 </script>
-
-<script>

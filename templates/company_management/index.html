@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row align-items-center">
+    <div class="col-6">
+        <h1>Empresas</h1>
+    </div>
+    <div class="col-6 text-end">
+        <a href="{% url 'add_company' %}" class="btn btn-primary">Novo</a>
+    </div>
+</div>
+{% if companies %}
+<div class="card mt-4">
+    <div class="card-body">
+        <div class="table-responsive mt-4">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nome da Empresa</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company in companies %}
+                    <tr>
+                        <td>{{ company.company_name }}</td>
+                        <td>
+                            {% if company.status %}
+                            <span class="badge bg-success">Ativo</span>
+                            {% else %}
+                            <span class="badge bg-danger">Inativo</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'edit_company' company.id %}" class="btn btn-secondary">
+                                Editar
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<p>Nenhuma empresa encontrada.</p>
+{% endif %}
+
+{% endblock %}

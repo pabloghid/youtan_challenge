@@ -14,6 +14,8 @@
 
                     {{ branch_form.as_p }}
 
+                    <div id="add-error-messages"></div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -37,7 +39,20 @@
                     location.reload();
                 },
                 error: function (xhr, status, error) {
+                    var response = JSON.parse(xhr.responseText);
+                    var errors = response.errors
+                    /* error div */
+                    var errorMessages = document.getElementById("add-error-messages");
+                    errorMessages.innerHTML = "";
 
+                    for (var field in errors) {
+                        var fieldErrors = errors[field];
+                        /* insert error in html */
+                        var errorMessage = document.createElement("p");
+                        errorMessage.classList.add("alert", "alert-danger");
+                        errorMessage.innerText = fieldErrors;
+                        errorMessages.appendChild(errorMessage);
+                    }
                 }
             });
         });
