@@ -13,7 +13,5 @@ class ListCompanyBranches(admin.ModelAdmin):
     search_fields = ("branch_name",)
     list_per_page = 10
 
-
-
 admin.site.register(Company, ListCompanies)
 admin.site.register(CompanyBranch, ListCompanyBranches)

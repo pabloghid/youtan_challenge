@@ -37,9 +37,6 @@ def edit_company(request, pk):
     page = request.GET.get('page')
     company_branches = p.get_page(page)
 
-    #original
-    #company_branches = CompanyBranch.objects.filter(company=pk)
-
     ## Forms
     form = CompanyForm(request.POST or None, instance=company_data)
     branch_form = BranchForm(request.POST or None)
