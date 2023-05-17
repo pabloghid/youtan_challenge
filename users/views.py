@@ -20,7 +20,7 @@ def login(request):
                 messages.success(request, f"{username} logado com sucesso!")
                 return redirect('home')
             
-            messages.error(request, "Erro ao efetuar login")
+            messages.error(request, "Erro ao efetuar login. Verifique os dados e tente novamente.")
             return redirect('login')
     return render(request, "users/login.html", {"form": form})
 
